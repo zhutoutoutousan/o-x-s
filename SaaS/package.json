@@ -1,0 +1,18 @@
+{
+  "name": "lovers-saas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Low-code drag-and-drop platform for lovers",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm --filter lovers-app dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

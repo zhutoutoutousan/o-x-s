@@ -1,0 +1,127 @@
+.timeline-container {
+  position: relative;
+  padding: 40px 0;
+  padding-left: 60px;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 25px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    #d4af37 0%,
+    #ff6b9d 25%,
+    #c77dff 50%,
+    #ffd700 75%,
+    #d4af37 100%
+  );
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  animation: timelineGlow 4s ease-in-out infinite;
+}
+
+@keyframes timelineGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 107, 157, 0.7);
+  }
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 80px;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -42px;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 20px currentColor;
+  z-index: 2;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  animation: markerPulse 2s ease-in-out infinite;
+}
+
+@keyframes markerPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.timeline-date {
+  font-size: 9px;
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+  font-family: 'Playfair Display', serif;
+}
+
+.timeline-content {
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+}
+
+.timeline-content:hover {
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.2);
+}
+
+.timeline-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.timeline-title {
+  margin: 0 0 12px 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+}
+
+.timeline-description {
+  margin: 0;
+  color: #e0e0e0;
+  line-height: 1.8;
+  font-size: 18px;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .timeline-container {
+    padding-left: 40px;
+  }
+  
+  .timeline-marker {
+    left: -32px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .timeline-date {
+    font-size: 8px;
+  }
+}

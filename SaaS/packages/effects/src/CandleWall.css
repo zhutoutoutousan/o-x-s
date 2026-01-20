@@ -1,0 +1,4 @@
+.candle-wall {
+  pointer-events: none;
+  mix-blend-mode: screen;
+}

@@ -1,0 +1,439 @@
+.hp-magic-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.magic-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.magic-tab {
+  padding: 15px 30px;
+  background: rgba(10, 10, 10, 0.8);
+  border: 2px solid rgba(212, 175, 55, 0.5);
+  border-radius: 15px;
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.magic-tab:hover {
+  border-color: #d4af37;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.magic-tab.active {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: #d4af37;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+}
+
+.magic-content {
+  min-height: 500px;
+}
+
+.section-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: #d4af37;
+  text-align: center;
+  margin-bottom: 40px;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.spells-grid,
+.potions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.spell-card,
+.potion-card {
+  background: rgba(10, 10, 10, 0.9);
+  border: 2px solid;
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.spell-card::before,
+.potion-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.spell-card:hover::before,
+.potion-card:hover::before {
+  left: 100%;
+}
+
+.spell-card:hover,
+.potion-card:hover {
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+  transform: translateY(-5px);
+}
+
+.spell-icon,
+.potion-icon {
+  font-size: 64px;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 0 15px currentColor);
+  animation: float 3s ease-in-out infinite;
+}
+
+.spell-name,
+.potion-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: #d4af37;
+  margin: 15px 0 10px;
+}
+
+.spell-incantation {
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(212, 175, 55, 0.8);
+  margin: 10px 0;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.spell-effect,
+.potion-description {
+  font-size: 14px;
+  color: rgba(245, 245, 245, 0.8);
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.spell-cast-btn,
+.potion-brew-btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  color: #0a0a0a;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.spell-cast-btn:hover,
+.potion-brew-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+}
+
+.potion-ingredients {
+  margin: 20px 0;
+  text-align: left;
+  font-size: 13px;
+  color: rgba(245, 245, 245, 0.7);
+}
+
+.potion-ingredients strong {
+  color: #d4af37;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.potion-ingredients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.potion-ingredients li {
+  padding: 5px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.potion-ingredients li::before {
+  content: '✨';
+  position: absolute;
+  left: 0;
+}
+
+.potion-effect {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.sorting-section {
+  text-align: center;
+}
+
+.sorting-hat-container {
+  background: rgba(10, 10, 10, 0.9);
+  border: 2px solid rgba(212, 175, 55, 0.5);
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(20px);
+}
+
+.sorting-hat {
+  font-size: 120px;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.5));
+}
+
+.sorting-text {
+  font-size: 20px;
+  font-style: italic;
+  color: #d4af37;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 1.8;
+}
+
+.houses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+}
+
+.house-card {
+  background: rgba(10, 10, 10, 0.9);
+  border: 3px solid;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.house-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.house-card:hover::before {
+  opacity: 1;
+}
+
+.house-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+}
+
+.house-card.selected {
+  box-shadow: 0 0 50px currentColor;
+  transform: scale(1.05);
+}
+
+.house-icon {
+  font-size: 80px;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 0 20px currentColor);
+  animation: float 3s ease-in-out infinite;
+}
+
+.house-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  margin: 15px 0;
+  text-shadow: 0 0 20px currentColor;
+}
+
+.house-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.trait-badge {
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  color: #0a0a0a;
+  font-weight: bold;
+  opacity: 0.9;
+}
+
+.spell-effect-overlay,
+.potion-effect-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(10px);
+}
+
+.spell-animation,
+.potion-animation {
+  text-align: center;
+  position: relative;
+}
+
+.spell-icon-large,
+.potion-icon-large {
+  font-size: 120px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 30px currentColor);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.spell-incantation-large {
+  font-size: 36px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: currentColor;
+  text-shadow: 0 0 20px currentColor;
+  margin-bottom: 20px;
+}
+
+.spell-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.spell-particles::before,
+.spell-particles::after {
+  content: '✨';
+  position: absolute;
+  font-size: 30px;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.spell-particles::before {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.spell-particles::after {
+  top: 60%;
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.potion-bubbles {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 20px auto;
+}
+
+.potion-bubbles::before,
+.potion-bubbles::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+  animation: bubble 2s ease-in-out infinite;
+}
+
+.potion-bubbles::before {
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.potion-bubbles::after {
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.potion-text {
+  font-size: 24px;
+  font-family: 'Playfair Display', serif;
+  color: currentColor;
+  margin-top: 20px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+@keyframes bubble {
+  0% {
+    bottom: 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    bottom: 100%;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .spells-grid,
+  .potions-grid,
+  .houses-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .magic-tabs {
+    flex-direction: column;
+  }
+  
+  .sorting-hat {
+    font-size: 80px;
+  }
+}
