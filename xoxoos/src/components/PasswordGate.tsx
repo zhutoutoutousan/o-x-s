@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import './PasswordGate.css';
 
 interface PasswordGateProps {
@@ -15,10 +14,8 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ onUnlock }) => {
   const [error, setError] = useState('');
   const [attempts, setAttempts] = useState(0);
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     // Check if already unlocked in this session
     if (typeof window !== 'undefined') {
       const unlocked = sessionStorage.getItem('arrival_unlocked');
@@ -54,48 +51,23 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ onUnlock }) => {
 
   return (
     <div className="password-gate">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="gate-container"
-      >
+      <div className="gate-container">
         <div className="gate-content">
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="gate-title"
-          >
+          <h1 className="gate-title">
             Arrival
-          </motion.h1>
+          </h1>
           
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="gate-subtitle"
-          >
+          <p className="gate-subtitle">
             Time is not a line, but a circle.
-          </motion.p>
+          </p>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="gate-description"
-          >
+          <p className="gate-description">
             To access this story, you must understand the language of time.
             <br />
             <span className="hint">The first picture sent via IM holds the key.</span>
-          </motion.p>
+          </p>
 
-          <motion.form
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            onSubmit={handleSubmit}
-            className="password-form"
-          >
+          <form onSubmit={handleSubmit} className="password-form">
             <input
               type="text"
               value={password}
@@ -108,65 +80,24 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ onUnlock }) => {
               autoFocus
             />
             
-            <AnimatePresence>
-              {error && (
-                <motion.p
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="error-message"
-                >
-                  {error}
-                </motion.p>
-              )}
-            </AnimatePresence>
+            {error && (
+              <p className="error-message">
+                {error}
+              </p>
+            )}
 
-            <motion.button
-              type="submit"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="password-submit"
-            >
+            <button type="submit" className="password-submit">
               Begin
-            </motion.button>
-          </motion.form>
+            </button>
+          </form>
 
           {attempts > 0 && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="attempts-hint"
-            >
+            <p className="attempts-hint">
               Attempts: {attempts}
-            </motion.p>
+            </p>
           )}
         </div>
-
-          {mounted && (
-            <div className="gate-particles">
-              {[...Array(20)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="particle"
-                  initial={{
-                    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
-                    y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),
-                    opacity: 0,
-                  }}
-                  animate={{
-                    y: [null, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080)],
-                    opacity: [0, 0.3, 0],
-                  }}
-                  transition={{
-                    duration: Math.random() * 3 + 2,
-                    repeat: Infinity,
-                    delay: Math.random() * 2,
-                  }}
-                />
-              ))}
-            </div>
-          )}
-      </motion.div>
+      </div>
     </div>
   );
 };
