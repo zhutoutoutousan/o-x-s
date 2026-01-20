@@ -1,0 +1,182 @@
+.loading-memories {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.loading-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Circular Time Symbols */
+.time-circle {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-ring {
+  position: absolute;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50%;
+  border-top-color: rgba(212, 175, 55, 0.8);
+  border-right-color: rgba(212, 175, 55, 0.6);
+}
+
+.ring-1 {
+  width: 200px;
+  height: 200px;
+  border-width: 3px;
+}
+
+.ring-2 {
+  width: 300px;
+  height: 300px;
+  border-width: 2px;
+  border-top-color: rgba(212, 175, 55, 0.6);
+  border-right-color: rgba(212, 175, 55, 0.4);
+}
+
+.ring-3 {
+  width: 400px;
+  height: 400px;
+  border-width: 1px;
+  border-top-color: rgba(212, 175, 55, 0.4);
+  border-right-color: rgba(212, 175, 55, 0.2);
+}
+
+/* Tear Drops */
+.tear-drops {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tear-drop {
+  position: absolute;
+  width: 8px;
+  height: 12px;
+  background: linear-gradient(
+    to bottom,
+    rgba(212, 175, 55, 0.8) 0%,
+    rgba(212, 175, 55, 0.4) 50%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  filter: blur(1px);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Glow Particles */
+.glow-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.glow-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #d4af37;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px rgba(212, 175, 55, 0.8),
+    0 0 40px rgba(212, 175, 55, 0.4);
+  filter: blur(2px);
+}
+
+/* Text */
+.loading-text-container {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.loading-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  color: #d4af37;
+  margin-bottom: 20px;
+  text-shadow: 
+    0 0 20px rgba(212, 175, 55, 0.5),
+    0 0 40px rgba(212, 175, 55, 0.3);
+  letter-spacing: 2px;
+}
+
+.loading-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 3vw, 24px);
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+/* Background glow effect */
+.loading-memories::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(212, 175, 55, 0.1) 0%,
+    transparent 70%
+  );
+  animation: pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .time-circle {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .ring-1 {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .ring-2 {
+    width: 225px;
+    height: 225px;
+  }
+  
+  .ring-3 {
+    width: 300px;
+    height: 300px;
+  }
+}

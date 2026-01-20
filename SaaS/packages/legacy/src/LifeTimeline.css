@@ -1,0 +1,195 @@
+.life-timeline {
+  position: relative;
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 30px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #3498db, #9b59b6, #e74c3c);
+  border-radius: 2px;
+}
+
+.timeline-year-section {
+  position: relative;
+  margin-bottom: 60px;
+  padding-left: 80px;
+}
+
+.year-marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.year-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #3498db;
+  border: 4px solid white;
+  box-shadow: 0 0 0 3px #3498db;
+  z-index: 2;
+}
+
+.year-label {
+  font-size: 28px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.year-memories {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.timeline-memory {
+  position: relative;
+  padding-left: 40px;
+}
+
+.memory-marker {
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #9b59b6;
+  border: 3px solid white;
+  box-shadow: 0 0 0 2px #9b59b6;
+}
+
+.memory-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.memory-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.memory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.memory-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.memory-type-icon {
+  font-size: 24px;
+}
+
+.memory-date {
+  font-size: 16px;
+  color: #7f8c8d;
+  margin-bottom: 15px;
+}
+
+.memory-description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #34495e;
+  margin-bottom: 15px;
+}
+
+.memory-thumbnail {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.memory-story-preview {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #9b59b6;
+  margin-top: 15px;
+}
+
+.memory-story-preview p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #2c3e50;
+  margin: 0;
+  font-style: italic;
+}
+
+.timeline-empty {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.empty-title {
+  font-size: 32px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.empty-text {
+  font-size: 18px;
+  color: #7f8c8d;
+}
+
+@media (max-width: 768px) {
+  .life-timeline {
+    padding: 20px 10px;
+  }
+
+  .timeline-line {
+    left: 20px;
+  }
+
+  .timeline-year-section {
+    padding-left: 60px;
+  }
+
+  .year-circle {
+    width: 24px;
+    height: 24px;
+  }
+
+  .year-label {
+    font-size: 22px;
+  }
+
+  .timeline-memory {
+    padding-left: 30px;
+  }
+
+  .memory-card {
+    padding: 20px;
+  }
+
+  .memory-title {
+    font-size: 18px;
+  }
+}
