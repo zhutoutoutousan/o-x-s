@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { PasswordGate } from '@/src/components/PasswordGate';
 import { PhotoGallery } from '@/src/components/PhotoGallery';
 import { LoadingMemories } from '@/src/components/LoadingMemories';
+import { DifficultMemories } from '@/src/components/DifficultMemories';
 import { getCloudinaryVideoUrl } from '@/src/utils/cloudinary';
 import '@/src/index.css';
 import './page.css';
@@ -278,6 +279,9 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Difficult but Valuable Memories */}
+      <DifficultMemories />
 
       {/* Final Narrative */}
       <section className="final-section">
