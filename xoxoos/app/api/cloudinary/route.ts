@@ -12,26 +12,79 @@ cloudinary.config({
   api_secret: API_SECRET,
 });
 
+// Helper function to fetch all resources with pagination
+async function fetchAllResources(resourceType: 'image' | 'video' | 'raw', maxResults: number = 500) {
+  const allResources: any[] = [];
+  let nextCursor: string | undefined = undefined;
+
+  do {
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      resource_type: resourceType,
+      max_results: maxResults,
+      next_cursor: nextCursor,
+    });
+
+    if (result.resources) {
+      allResources.push(...result.resources);
+    }
+
+    nextCursor = result.next_cursor;
+  } while (nextCursor);
+
+  return allResources;
+}
+
 export async function GET() {
   try {
-    // Fetch all images
-    const imagesResult = await cloudinary.api.resources({
-      type: 'upload',
-      resource_type: 'image',
-      max_results: 500,
-    });
+    // Fetch all resources (images, videos, and raw files like PDFs)
+    const [imagesResult, videosResult, rawResult] = await Promise.all([
+      fetchAllResources('image'),
+      fetchAllResources('video'),
+      fetchAllResources('raw'),
+    ]);
 
-    // Fetch all videos
-    const videosResult = await cloudinary.api.resources({
-      type: 'upload',
-      resource_type: 'video',
-      max_results: 500,
-    });
+    // Filter PDFs from raw files
+    const pdfsFromRaw = rawResult.filter((resource: any) => 
+      resource.format === 'pdf' || resource.format === 'PDF' || resource.secure_url?.toLowerCase().endsWith('.pdf')
+    );
 
-    return NextResponse.json({
-      images: imagesResult.resources || [],
-      videos: videosResult.resources || [],
-    });
+    // Filter PDFs from images array (Cloudinary sometimes stores PDFs as images)
+    const pdfsFromImages = imagesResult.filter((resource: any) => 
+      resource.format === 'pdf' || 
+      resource.format === 'PDF' || 
+      resource.secure_url?.toLowerCase().endsWith('.pdf') ||
+      resource.public_id?.toLowerCase().endsWith('.pdf') ||
+      resource.public_id?.toLowerCase().includes('.pdf')
+    );
+
+    // Combine all PDFs
+    const allPdfs = [...pdfsFromRaw, ...pdfsFromImages];
+
+    // Remove PDFs from images array
+    const filteredImages = imagesResult.filter((resource: any) => 
+      resource.format !== 'pdf' && 
+      resource.format !== 'PDF' && 
+      !resource.secure_url?.toLowerCase().endsWith('.pdf') &&
+      !resource.public_id?.toLowerCase().endsWith('.pdf') &&
+      !resource.public_id?.toLowerCase().includes('.pdf')
+    );
+
+    // Disable caching to always get fresh data
+    return NextResponse.json(
+      {
+        images: filteredImages || [],
+        videos: videosResult || [],
+        pdfs: allPdfs || [],
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      }
+    );
   } catch (error: any) {
     console.error('Error fetching Cloudinary resources:', error);
     console.error('Error details:', {
@@ -41,11 +94,20 @@ export async function GET() {
     });
     
     // Return empty arrays with error info for debugging
-    return NextResponse.json({
-      images: [],
-      videos: [],
-      error: error.message || 'Unknown error',
-      http_code: error.http_code,
-    });
+    return NextResponse.json(
+      {
+        images: [],
+        videos: [],
+        pdfs: [],
+        error: error.message || 'Unknown error',
+        http_code: error.http_code,
+      },
+      {
+        status: error.http_code || 500,
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        },
+      }
+    );
   }
 }
