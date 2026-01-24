@@ -7,7 +7,7 @@ import { PasswordGate } from '@/src/components/PasswordGate';
 import { PhotoGallery } from '@/src/components/PhotoGallery';
 import { LoadingMemories } from '@/src/components/LoadingMemories';
 import { DifficultMemories } from '@/src/components/DifficultMemories';
-import { getCloudinaryVideoUrl } from '@/src/utils/cloudinary';
+import { getCloudinaryVideoUrl, getCloudinaryImageUrl } from '@/src/utils/cloudinary';
 import '@/src/index.css';
 import './page.css';
 
@@ -38,12 +38,24 @@ export default function HomePage() {
 
   const fetchCloudinaryResources = async () => {
     try {
-      const response = await fetch('/api/cloudinary');
+      // Add cache-busting timestamp to ensure fresh data
+      const response = await fetch(`/api/cloudinary?t=${Date.now()}`);
       const data = await response.json();
       
       if (data.images) {
+        // Filter out any PDFs that might have slipped through (safety check)
+        const filteredImages = data.images.filter((img: CloudinaryResource) => {
+          const isPdf = 
+            img.format === 'pdf' || 
+            img.format === 'PDF' || 
+            img.secure_url?.toLowerCase().endsWith('.pdf') ||
+            img.public_id?.toLowerCase().endsWith('.pdf') ||
+            img.public_id?.toLowerCase().includes('.pdf');
+          return !isPdf;
+        });
+        
         // Sort by creation date (newest first)
-        const sortedImages = data.images.sort((a: CloudinaryResource, b: CloudinaryResource) => 
+        const sortedImages = filteredImages.sort((a: CloudinaryResource, b: CloudinaryResource) => 
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
         setImages(sortedImages);
@@ -57,6 +69,7 @@ export default function HomePage() {
           setHeroVideo(sortedVideos[0].public_id);
         }
       }
+      // PDFs are filtered out - not ready for display yet
     } catch (error) {
       console.error('Error fetching Cloudinary resources:', error);
     } finally {
@@ -107,7 +120,7 @@ export default function HomePage() {
               <source
                 src={getCloudinaryVideoUrl(heroVideo, {
                   quality: 'auto',
-                  format: 'auto'
+                  format: 'mp4'
                 })}
                 type="video/mp4"
               />
@@ -235,16 +248,12 @@ export default function HomePage() {
                   <video
                     controls
                     className="video-element"
-                    poster={getCloudinaryVideoUrl(video.public_id, {
-                      quality: 'auto',
-                      format: 'auto',
-                      width: 800
-                    })}
+                    preload="metadata"
                   >
                     <source
                       src={getCloudinaryVideoUrl(video.public_id, {
                         quality: 'auto',
-                        format: 'auto'
+                        format: 'mp4'
                       })}
                       type="video/mp4"
                     />
@@ -260,16 +269,12 @@ export default function HomePage() {
                 <video
                   controls
                   className="video-element"
-                  poster={getCloudinaryVideoUrl(videos[0].public_id, {
-                    quality: 'auto',
-                    format: 'auto',
-                    width: 800
-                  })}
+                  preload="metadata"
                 >
                   <source
                     src={getCloudinaryVideoUrl(videos[0].public_id, {
                       quality: 'auto',
-                      format: 'auto'
+                      format: 'mp4'
                     })}
                     type="video/mp4"
                   />

@@ -78,6 +78,7 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ onUnlock }) => {
               placeholder="Enter the code"
               className="password-input"
               autoFocus
+              autoComplete="off"
             />
             
             {error && (
