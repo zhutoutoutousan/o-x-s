@@ -89,7 +89,9 @@ export default function HomePage() {
         );
         setVideos(sortedVideos);
         if (sortedVideos.length > 0) {
-          setHeroVideo(sortedVideos[0]);
+          // Randomly select a video for the hero
+          const randomIndex = Math.floor(Math.random() * sortedVideos.length);
+          setHeroVideo(sortedVideos[randomIndex]);
         }
       }
       setLastFetchTime(Date.now());
