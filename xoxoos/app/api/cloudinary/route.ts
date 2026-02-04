@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'drasvxb0d';
 const API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || '367448791256394';
 const API_SECRET = process.env.CLOUDINARY_API_SECRET || 'vJC-5-kIhx_0YptgfjXEFgAPAWk';
@@ -13,7 +17,7 @@ cloudinary.config({
 });
 
 // Helper function to fetch all resources with pagination
-async function fetchAllResources(resourceType: 'image' | 'video' | 'raw', maxResults: number = 500) {
+async function fetchAllResources(resourceType: 'image' | 'video', maxResults: number = 500) {
   const allResources: any[] = [];
   let nextCursor: string | undefined = undefined;
 
@@ -37,31 +41,13 @@ async function fetchAllResources(resourceType: 'image' | 'video' | 'raw', maxRes
 
 export async function GET() {
   try {
-    // Fetch all resources (images, videos, and raw files like PDFs)
-    const [imagesResult, videosResult, rawResult] = await Promise.all([
+    // Fetch all resources (images and videos only - PDFs removed)
+    const [imagesResult, videosResult] = await Promise.all([
       fetchAllResources('image'),
       fetchAllResources('video'),
-      fetchAllResources('raw'),
     ]);
 
-    // Filter PDFs from raw files
-    const pdfsFromRaw = rawResult.filter((resource: any) => 
-      resource.format === 'pdf' || resource.format === 'PDF' || resource.secure_url?.toLowerCase().endsWith('.pdf')
-    );
-
-    // Filter PDFs from images array (Cloudinary sometimes stores PDFs as images)
-    const pdfsFromImages = imagesResult.filter((resource: any) => 
-      resource.format === 'pdf' || 
-      resource.format === 'PDF' || 
-      resource.secure_url?.toLowerCase().endsWith('.pdf') ||
-      resource.public_id?.toLowerCase().endsWith('.pdf') ||
-      resource.public_id?.toLowerCase().includes('.pdf')
-    );
-
-    // Combine all PDFs
-    const allPdfs = [...pdfsFromRaw, ...pdfsFromImages];
-
-    // Remove PDFs from images array
+    // Filter out PDFs from images array (safety check)
     const filteredImages = imagesResult.filter((resource: any) => 
       resource.format !== 'pdf' && 
       resource.format !== 'PDF' && 
@@ -75,13 +61,13 @@ export async function GET() {
       {
         images: filteredImages || [],
         videos: videosResult || [],
-        pdfs: allPdfs || [],
       },
       {
         headers: {
           'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
           'Pragma': 'no-cache',
           'Expires': '0',
+          'X-Timestamp': Date.now().toString(), // Add timestamp for cache busting
         },
       }
     );
@@ -98,7 +84,6 @@ export async function GET() {
       {
         images: [],
         videos: [],
-        pdfs: [],
         error: error.message || 'Unknown error',
         http_code: error.http_code,
       },
