@@ -26,20 +26,37 @@ export default function HomePage() {
   const [images, setImages] = useState<CloudinaryResource[]>([]);
   const [videos, setVideos] = useState<CloudinaryResource[]>([]);
   const [loading, setLoading] = useState(true);
-  const [heroVideo, setHeroVideo] = useState<string | null>(null);
+  const [heroVideo, setHeroVideo] = useState<CloudinaryResource | null>(null);
   const [currentMemory, setCurrentMemory] = useState(0);
   const [showNarrative, setShowNarrative] = useState(true);
+  const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
   useEffect(() => {
     if (isUnlocked) {
       fetchCloudinaryResources();
+      // Auto-refresh every 30 seconds to detect new uploads
+      const refreshInterval = setInterval(() => {
+        fetchCloudinaryResources(true); // Silent refresh
+      }, 30000);
+
+      return () => clearInterval(refreshInterval);
     }
   }, [isUnlocked]);
 
-  const fetchCloudinaryResources = async () => {
+  const fetchCloudinaryResources = async (silent: boolean = false) => {
     try {
+      if (!silent) {
+        setLoading(true);
+      }
+      
       // Add cache-busting timestamp to ensure fresh data
-      const response = await fetch(`/api/cloudinary?t=${Date.now()}`);
+      const timestamp = Date.now();
+      const response = await fetch(`/api/cloudinary?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       const data = await response.json();
       
       if (data.images) {
@@ -61,19 +78,27 @@ export default function HomePage() {
         setImages(sortedImages);
       }
       if (data.videos) {
-        const sortedVideos = data.videos.sort((a: CloudinaryResource, b: CloudinaryResource) => 
+        // Filter out videos that are still processing (status: 'pending' or 'processing')
+        const availableVideos = data.videos.filter((video: CloudinaryResource) => {
+          // Use secure_url directly - it's already authenticated
+          return video.secure_url && video.resource_type === 'video';
+        });
+        
+        const sortedVideos = availableVideos.sort((a: CloudinaryResource, b: CloudinaryResource) => 
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
         setVideos(sortedVideos);
         if (sortedVideos.length > 0) {
-          setHeroVideo(sortedVideos[0].public_id);
+          setHeroVideo(sortedVideos[0]);
         }
       }
-      // PDFs are filtered out - not ready for display yet
+      setLastFetchTime(Date.now());
     } catch (error) {
       console.error('Error fetching Cloudinary resources:', error);
     } finally {
-      setLoading(false);
+      if (!silent) {
+        setLoading(false);
+      }
     }
   };
 
@@ -109,19 +134,26 @@ export default function HomePage() {
       {/* Hero Section with MP4 Video */}
       <section className="hero-section">
         <div className="hero-video-container">
-          {heroVideo ? (
+          {heroVideo?.secure_url ? (
             <video
               autoPlay
               loop
               muted
               playsInline
               className="hero-video"
-            >
-              <source
-                src={getCloudinaryVideoUrl(heroVideo, {
+              onError={(e) => {
+                console.error('Video load error:', e);
+                // Fallback: try using the generated URL if secure_url fails
+                const videoElement = e.currentTarget;
+                const fallbackUrl = getCloudinaryVideoUrl(heroVideo.public_id, {
                   quality: 'auto',
                   format: 'mp4'
-                })}
+                });
+                videoElement.src = fallbackUrl;
+              }}
+            >
+              <source
+                src={heroVideo.secure_url}
                 type="video/mp4"
               />
             </video>
@@ -249,9 +281,19 @@ export default function HomePage() {
                     controls
                     className="video-element"
                     preload="metadata"
+                    onError={(e) => {
+                      console.error('Video load error:', video.public_id);
+                      // Fallback: try using the generated URL if secure_url fails
+                      const videoElement = e.currentTarget;
+                      const fallbackUrl = getCloudinaryVideoUrl(video.public_id, {
+                        quality: 'auto',
+                        format: 'mp4'
+                      });
+                      videoElement.src = fallbackUrl;
+                    }}
                   >
                     <source
-                      src={getCloudinaryVideoUrl(video.public_id, {
+                      src={video.secure_url || getCloudinaryVideoUrl(video.public_id, {
                         quality: 'auto',
                         format: 'mp4'
                       })}
@@ -270,9 +312,19 @@ export default function HomePage() {
                   controls
                   className="video-element"
                   preload="metadata"
+                  onError={(e) => {
+                    console.error('Video load error:', videos[0].public_id);
+                    // Fallback: try using the generated URL if secure_url fails
+                    const videoElement = e.currentTarget;
+                    const fallbackUrl = getCloudinaryVideoUrl(videos[0].public_id, {
+                      quality: 'auto',
+                      format: 'mp4'
+                    });
+                    videoElement.src = fallbackUrl;
+                  }}
                 >
                   <source
-                    src={getCloudinaryVideoUrl(videos[0].public_id, {
+                    src={videos[0].secure_url || getCloudinaryVideoUrl(videos[0].public_id, {
                       quality: 'auto',
                       format: 'mp4'
                     })}
