@@ -27,6 +27,8 @@ async function fetchAllResources(resourceType: 'image' | 'video', maxResults: nu
       resource_type: resourceType,
       max_results: maxResults,
       next_cursor: nextCursor,
+      // Fetch from all folders (no prefix specified means all folders)
+      // This will include root level and all subfolders like 'xoxoos'
     });
 
     if (result.resources) {
@@ -42,10 +44,17 @@ async function fetchAllResources(resourceType: 'image' | 'video', maxResults: nu
 export async function GET() {
   try {
     // Fetch all resources (images and videos only - PDFs removed)
+    // This includes resources from all folders (root level and subfolders like 'xoxoos')
     const [imagesResult, videosResult] = await Promise.all([
       fetchAllResources('image'),
       fetchAllResources('video'),
     ]);
+    
+    // Log for debugging - check if xoxoos folder resources are included
+    console.log(`Fetched ${imagesResult.length} images and ${videosResult.length} videos`);
+    const xoxoosVideos = videosResult.filter((v: any) => v.public_id?.startsWith('xoxoos/'));
+    const xoxoosImages = imagesResult.filter((i: any) => i.public_id?.startsWith('xoxoos/'));
+    console.log(`Found ${xoxoosVideos.length} videos and ${xoxoosImages.length} images in xoxoos folder`);
 
     // Filter out PDFs from images array (safety check)
     const filteredImages = imagesResult.filter((resource: any) => 
