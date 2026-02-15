@@ -40,7 +40,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, onImageDelet
     const baseOptions = {
       width: fullSize ? 1920 : 400,
       height: fullSize ? 1920 : 400,
-      crop: fullSize ? 'fit' : 'fill',
+      crop: (fullSize ? 'fit' : 'fill') as 'fit' | 'fill',
       quality: 'auto' as const,
       transformation: transforms || '',
     };
