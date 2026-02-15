@@ -139,7 +139,7 @@ export default function HomePage() {
       {/* Hero Section with MP4 Video */}
       <section id="hero" className="hero-section">
         <div className="hero-video-container">
-          {heroVideo?.secure_url ? (
+              {heroVideo ? (
             <video
               autoPlay
               loop
@@ -147,18 +147,21 @@ export default function HomePage() {
               playsInline
               className="hero-video"
               onError={(e) => {
-                console.error('Video load error:', e);
-                // Fallback: try using the generated URL if secure_url fails
+                console.error('Video load error:', heroVideo.public_id);
+                // Fallback: try using the generated URL with different quality
                 const videoElement = e.currentTarget;
                 const fallbackUrl = getCloudinaryVideoUrl(heroVideo.public_id, {
-                  quality: 'auto',
+                  quality: 80,
                   format: 'mp4'
                 });
                 videoElement.src = fallbackUrl;
               }}
             >
               <source
-                src={heroVideo.secure_url}
+                src={getCloudinaryVideoUrl(heroVideo.public_id, {
+                  quality: 'auto',
+                  format: 'mp4'
+                })}
                 type="video/mp4"
               />
             </video>
@@ -288,17 +291,17 @@ export default function HomePage() {
                     preload="metadata"
                     onError={(e) => {
                       console.error('Video load error:', video.public_id);
-                      // Fallback: try using the generated URL if secure_url fails
+                      // Fallback: try using the generated URL with different quality
                       const videoElement = e.currentTarget;
                       const fallbackUrl = getCloudinaryVideoUrl(video.public_id, {
-                        quality: 'auto',
+                        quality: 80,
                         format: 'mp4'
                       });
                       videoElement.src = fallbackUrl;
                     }}
                   >
                     <source
-                      src={video.secure_url || getCloudinaryVideoUrl(video.public_id, {
+                      src={getCloudinaryVideoUrl(video.public_id, {
                         quality: 'auto',
                         format: 'mp4'
                       })}
@@ -319,17 +322,17 @@ export default function HomePage() {
                   preload="metadata"
                   onError={(e) => {
                     console.error('Video load error:', videos[0].public_id);
-                    // Fallback: try using the generated URL if secure_url fails
+                    // Fallback: try using the generated URL with different quality
                     const videoElement = e.currentTarget;
                     const fallbackUrl = getCloudinaryVideoUrl(videos[0].public_id, {
-                      quality: 'auto',
+                      quality: 80,
                       format: 'mp4'
                     });
                     videoElement.src = fallbackUrl;
                   }}
                 >
                   <source
-                    src={videos[0].secure_url || getCloudinaryVideoUrl(videos[0].public_id, {
+                    src={getCloudinaryVideoUrl(videos[0].public_id, {
                       quality: 'auto',
                       format: 'mp4'
                     })}
