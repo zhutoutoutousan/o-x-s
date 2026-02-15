@@ -54,13 +54,26 @@ export default function HomePage() {
       
       // Add cache-busting timestamp to ensure fresh data
       const timestamp = Date.now();
+      console.log('Fetching Cloudinary resources at:', new Date().toISOString(), 'timestamp:', timestamp);
       const response = await fetch(`/api/cloudinary?t=${timestamp}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
         },
       });
+      
+      if (!response.ok) {
+        console.error('Failed to fetch resources:', response.status, response.statusText);
+        return;
+      }
       const data = await response.json();
+      
+      console.log('Received data:', {
+        imagesCount: data.images?.length || 0,
+        videosCount: data.videos?.length || 0,
+        timestamp: new Date().toISOString()
+      });
       
       if (data.images) {
         // Filter out any PDFs that might have slipped through (safety check)
@@ -84,17 +97,32 @@ export default function HomePage() {
         // Filter out videos that are still processing (status: 'pending' or 'processing')
         const availableVideos = data.videos.filter((video: CloudinaryResource) => {
           // Use secure_url directly - it's already authenticated
-          return video.secure_url && video.resource_type === 'video';
+          const isValid = video.secure_url && video.resource_type === 'video';
+          if (!isValid) {
+            console.log('Filtered out video:', video.public_id, 'reason: missing secure_url or wrong resource_type');
+          }
+          return isValid;
         });
+        
+        console.log(`Processing ${availableVideos.length} available videos out of ${data.videos.length} total`);
         
         const sortedVideos = availableVideos.sort((a: CloudinaryResource, b: CloudinaryResource) => 
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
-        setVideos(sortedVideos);
+        
+        console.log('Setting videos:', sortedVideos.length, 'videos');
+        console.log('Video public_ids:', sortedVideos.map((v: CloudinaryResource) => v.public_id));
+        
+        // Force state update - use functional update to ensure React detects the change
+        setVideos(() => [...sortedVideos]);
+        
         if (sortedVideos.length > 0) {
           // Randomly select a video for the hero
           const randomIndex = Math.floor(Math.random() * sortedVideos.length);
           setHeroVideo(sortedVideos[randomIndex]);
+          console.log('Hero video set to:', sortedVideos[randomIndex].public_id);
+        } else {
+          setHeroVideo(null);
         }
       }
       setLastFetchTime(Date.now());
