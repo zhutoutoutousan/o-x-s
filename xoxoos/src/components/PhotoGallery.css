@@ -98,6 +98,10 @@
   border-radius: 20px;
   padding: 20px;
   border: 2px solid rgba(212, 175, 55, 0.3);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-close {
@@ -186,9 +190,10 @@
 .modal-image-container {
   position: relative;
   width: 100%;
-  max-height: 70vh;
+  max-height: 50vh;
   overflow: auto;
   margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 .modal-image {
@@ -205,6 +210,8 @@
   border-radius: 12px;
   padding: 20px;
   margin-top: 20px;
+  flex-shrink: 0;
+  overflow: visible;
 }
 
 .edit-menu-title {
@@ -321,8 +328,18 @@
     padding: 20px 10px;
   }
   
+  .image-modal {
+    padding: 10px;
+  }
+  
   .modal-content {
     padding: 10px;
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .modal-image-container {
+    max-height: 40vh;
   }
 
   .modal-header {
