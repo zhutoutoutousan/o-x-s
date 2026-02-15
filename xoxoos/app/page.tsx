@@ -305,39 +305,51 @@ export default function HomePage() {
           </motion.h2>
           <div className="videos-grid">
             {videos.length > 1 ? (
-              videos.slice(1).map((video, index) => (
-                <motion.div
-                  key={video.public_id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="video-card"
-                >
-                  <video
-                    controls
-                    className="video-element"
-                    preload="metadata"
-                    onError={(e) => {
-                      console.error('Video load error:', video.public_id);
-                      // Fallback: try using the generated URL with different quality
-                      const videoElement = e.currentTarget;
-                      const fallbackUrl = getCloudinaryVideoUrl(video.public_id, {
-                        quality: 80,
-                        format: 'mp4'
-                      });
-                      videoElement.src = fallbackUrl;
-                    }}
+              videos.slice(1).map((video, index) => {
+                const videoUrl = getCloudinaryVideoUrl(video.public_id, {
+                  quality: 'auto',
+                  format: 'mp4'
+                });
+                console.log(`Rendering video ${index + 1}/${videos.length - 1}:`, video.public_id, 'URL:', videoUrl);
+                
+                return (
+                  <motion.div
+                    key={video.public_id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="video-card"
                   >
-                    <source
-                      src={getCloudinaryVideoUrl(video.public_id, {
-                        quality: 'auto',
-                        format: 'mp4'
-                      })}
-                      type="video/mp4"
-                    />
-                  </video>
-                </motion.div>
-              ))
+                    <video
+                      controls
+                      className="video-element"
+                      preload="metadata"
+                      onLoadStart={() => {
+                        console.log('Video load started:', video.public_id);
+                      }}
+                      onLoadedData={() => {
+                        console.log('Video loaded successfully:', video.public_id);
+                      }}
+                      onError={(e) => {
+                        console.error('Video load error:', video.public_id, 'Current src:', e.currentTarget.src);
+                        // Fallback: try using the generated URL with different quality
+                        const videoElement = e.currentTarget;
+                        const fallbackUrl = getCloudinaryVideoUrl(video.public_id, {
+                          quality: 80,
+                          format: 'mp4'
+                        });
+                        console.log('Trying fallback URL:', fallbackUrl);
+                        videoElement.src = fallbackUrl;
+                      }}
+                    >
+                      <source
+                        src={videoUrl}
+                        type="video/mp4"
+                      />
+                    </video>
+                  </motion.div>
+                );
+              })
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}
