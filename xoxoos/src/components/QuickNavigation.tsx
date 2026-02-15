@@ -65,6 +65,7 @@ export function QuickNavigation() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         aria-label="Toggle navigation"
+        type="button"
       >
         <motion.span
           animate={{ rotate: isOpen ? 180 : 0 }}
@@ -97,6 +98,7 @@ export function QuickNavigation() {
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ scale: 1.05, x: 5 }}
                 whileTap={{ scale: 0.95 }}
+                type="button"
               >
                 <span className="quick-nav-icon">{item.icon}</span>
                 <span className="quick-nav-label">{item.label}</span>
