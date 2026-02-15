@@ -259,7 +259,7 @@ export default function HomePage() {
         >
           Past, present, and future—all existing simultaneously
         </motion.p>
-        <PhotoGallery images={images} />
+        <PhotoGallery images={images} onImageDeleted={() => fetchCloudinaryResources()} />
       </section>
 
       {/* Additional Videos Section */}

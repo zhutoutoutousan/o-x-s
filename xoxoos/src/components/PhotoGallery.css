@@ -125,10 +125,193 @@
   transform: scale(1.1);
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-action-btn {
+  padding: 10px 16px;
+  border: 1px solid;
+  border-radius: 8px;
+  background: rgba(15, 15, 15, 0.8);
+  color: #f5f5f5;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-action-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.modal-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-action-btn.edit {
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #60a5fa;
+}
+
+.modal-action-btn.edit:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.7);
+}
+
+.modal-action-btn.delete {
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #f87171;
+}
+
+.modal-action-btn.delete:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.7);
+}
+
+.modal-image-container {
+  position: relative;
+  width: 100%;
+  max-height: 70vh;
+  overflow: auto;
+  margin-bottom: 20px;
+}
+
 .modal-image {
   width: 100%;
   height: auto;
   border-radius: 12px;
+  max-width: 100%;
+}
+
+/* Edit Menu */
+.edit-menu {
+  background: rgba(15, 15, 15, 0.9);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.edit-menu-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: #d4af37;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.5px;
+}
+
+.edit-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-control-group label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: rgba(245, 245, 245, 0.8);
+  letter-spacing: 0.5px;
+}
+
+.rotate-controls,
+.flip-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.rotation-display {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: rgba(245, 245, 245, 0.6);
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.edit-btn {
+  padding: 10px 16px;
+  border: 1px solid rgba(139, 69, 19, 0.5);
+  border-radius: 8px;
+  background: rgba(15, 15, 15, 0.6);
+  color: #f5f5f5;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+  min-width: 100px;
+}
+
+.edit-btn:hover:not(:disabled) {
+  background: rgba(139, 69, 19, 0.3);
+  border-color: rgba(139, 69, 19, 0.7);
+  transform: translateY(-2px);
+}
+
+.edit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-btn.active {
+  background: rgba(139, 69, 19, 0.4);
+  border-color: rgba(139, 69, 19, 0.8);
+  color: #d4af37;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.edit-btn.reset {
+  background: rgba(107, 114, 128, 0.2);
+  border-color: rgba(107, 114, 128, 0.5);
+  color: #9ca3af;
+}
+
+.edit-btn.reset:hover:not(:disabled) {
+  background: rgba(107, 114, 128, 0.3);
+}
+
+.edit-btn.reupload {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+  border-color: rgba(34, 197, 94, 0.5);
+  color: #4ade80;
+  font-weight: 500;
+}
+
+.edit-btn.reupload:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.2));
+  border-color: rgba(34, 197, 94, 0.7);
 }
 
 @media (max-width: 768px) {
@@ -140,5 +323,38 @@
   
   .modal-content {
     padding: 10px;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .modal-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .modal-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .edit-menu {
+    padding: 16px;
+  }
+
+  .rotate-controls,
+  .flip-controls {
+    flex-direction: column;
+  }
+
+  .edit-btn {
+    width: 100%;
+  }
+
+  .edit-actions {
+    flex-direction: column;
   }
 }
