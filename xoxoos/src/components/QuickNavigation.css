@@ -9,6 +9,10 @@
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   will-change: transform;
+  /* Force visibility on iOS */
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
 }
 
 .quick-nav-toggle {
@@ -16,11 +20,13 @@
   height: 50px;
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(139, 69, 19, 0.9), rgba(160, 82, 45, 0.9));
+  /* Fallback solid color for iOS */
+  background-color: rgba(139, 69, 19, 0.95);
   border: 2px solid rgba(255, 255, 255, 0.2);
   color: #f5f5f5;
   font-size: 24px;
   cursor: pointer;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
@@ -33,6 +39,11 @@
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
+  /* Force visibility on iOS */
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 1501;
 }
 
 .quick-nav-toggle:hover {
@@ -118,6 +129,11 @@
     /* Ensure it's visible on iOS */
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
+    /* Force visibility */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9999 !important;
   }
 
   .quick-nav-toggle {
@@ -155,17 +171,28 @@
 /* iOS-specific fixes */
 @supports (-webkit-touch-callout: none) {
   .quick-nav-container {
-    position: fixed;
+    position: fixed !important;
     /* Ensure visibility on iOS Safari */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9999 !important;
   }
 
   .quick-nav-toggle {
     /* Better touch target for iOS */
-    min-width: 44px;
-    min-height: 44px;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    width: 44px !important;
+    height: 44px !important;
     -webkit-tap-highlight-color: rgba(139, 69, 19, 0.3);
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: rgba(139, 69, 19, 0.95) !important;
+    z-index: 10000 !important;
   }
 
   .quick-nav-menu {
@@ -173,6 +200,10 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     will-change: transform;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 10001 !important;
   }
 }
 
@@ -180,13 +211,19 @@
 @media (max-width: 480px) {
   .quick-nav-container {
     left: 8px;
-    /* Keep visible but smaller */
+    /* Keep visible but smaller - NEVER hide on iOS */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .quick-nav-toggle {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    /* Ensure minimum touch target size for iOS */
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .quick-nav-menu {
