@@ -69,6 +69,12 @@ export default function HomePage() {
       }
       const data = await response.json();
       
+      console.log('Received data:', {
+        imagesCount: data.images?.length || 0,
+        videosCount: data.videos?.length || 0,
+        timestamp: new Date().toISOString()
+      });
+      
       if (data.images) {
         // Filter out any PDFs that might have slipped through (safety check)
         const filteredImages = data.images.filter((img: CloudinaryResource) => {
