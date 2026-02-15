@@ -7,6 +7,7 @@ import { PasswordGate } from '@/src/components/PasswordGate';
 import { PhotoGallery } from '@/src/components/PhotoGallery';
 import { LoadingMemories } from '@/src/components/LoadingMemories';
 import { DifficultMemories } from '@/src/components/DifficultMemories';
+import { MediaUpload } from '@/src/components/MediaUpload';
 import { getCloudinaryVideoUrl, getCloudinaryImageUrl } from '@/src/utils/cloudinary';
 import '@/src/index.css';
 import './page.css';
@@ -365,6 +366,9 @@ export default function HomePage() {
           </p>
         </motion.div>
       </section>
+
+      {/* Media Upload Component */}
+      <MediaUpload onUploadComplete={() => fetchCloudinaryResources()} />
     </div>
   );
 }
