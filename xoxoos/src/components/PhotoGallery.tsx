@@ -37,10 +37,19 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, onImageDelet
                   image.secure_url?.toLowerCase().includes('.heic') ||
                   image.secure_url?.toLowerCase().includes('.heif');
     
+    // For transformed images, don't set width/height to preserve aspect ratio
     const baseOptions = {
-      width: fullSize ? 1920 : 400,
-      height: fullSize ? 1920 : 400,
-      crop: (fullSize ? 'fit' : 'fill') as 'fit' | 'fill',
+      ...(fullSize && !transforms ? {
+        width: 1920,
+        height: 1920,
+        crop: 'fit' as const,
+      } : fullSize ? {
+        crop: 'fit' as const,
+      } : {
+        width: 400,
+        height: 400,
+        crop: 'fill' as const,
+      }),
       quality: 'auto' as const,
       transformation: transforms || '',
     };
@@ -64,6 +73,16 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, onImageDelet
     if (!selectedImage) return '';
     
     const transforms: string[] = [];
+    
+    // Apply flips first (they're applied before rotation in Cloudinary)
+    if (flipHorizontal) {
+      transforms.push('fl_horizontal');
+    }
+    if (flipVertical) {
+      transforms.push('fl_vertical');
+    }
+    
+    // Then apply rotation
     if (rotation !== 0) {
       // Cloudinary rotation: a_90 means rotate 90 degrees clockwise
       // Normalize rotation to 0-360 range
@@ -72,15 +91,26 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ images, onImageDelet
         transforms.push(`a_${normalizedRotation}`);
       }
     }
-    if (flipHorizontal) {
-      transforms.push('fl_horizontal');
-    }
-    if (flipVertical) {
-      transforms.push('fl_vertical');
+    
+    // If no transformations, return original
+    if (transforms.length === 0) {
+      return getDisplayUrl(selectedImage, true);
     }
     
-    const transformString = transforms.length > 0 ? transforms.join(',') : '';
-    return getDisplayUrl(selectedImage, true, transformString);
+    // Build transformation string - transformations come first, then crop/quality
+    const transformString = `${transforms.join(',')},c_fit,q_auto`;
+    
+    // Build URL manually to ensure correct format
+    const CLOUD_NAME = 'drasvxb0d'; // Use the cloud name directly
+    const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}`;
+    
+    // Extract public_id from secure_url or use public_id directly
+    const publicId = selectedImage.public_id;
+    
+    // Build the transformed URL
+    const url = `${BASE_URL}/image/upload/${transformString}/${publicId}`;
+    
+    return url;
   };
 
   // Delete image
