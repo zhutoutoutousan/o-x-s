@@ -304,13 +304,13 @@ export default function HomePage() {
             Memories in Motion
           </motion.h2>
           <div className="videos-grid">
-            {videos.length > 1 ? (
-              videos.slice(1).map((video, index) => {
+            {videos.length > 0 ? (
+              videos.map((video, index) => {
                 const videoUrl = getCloudinaryVideoUrl(video.public_id, {
                   quality: 'auto',
                   format: 'mp4'
                 });
-                console.log(`Rendering video ${index + 1}/${videos.length - 1}:`, video.public_id, 'URL:', videoUrl);
+                console.log(`Rendering video ${index + 1}/${videos.length}:`, video.public_id, 'URL:', videoUrl);
                 
                 return (
                   <motion.div
@@ -351,35 +351,9 @@ export default function HomePage() {
                 );
               })
             ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="video-card"
-              >
-                <video
-                  controls
-                  className="video-element"
-                  preload="metadata"
-                  onError={(e) => {
-                    console.error('Video load error:', videos[0].public_id);
-                    // Fallback: try using the generated URL with different quality
-                    const videoElement = e.currentTarget;
-                    const fallbackUrl = getCloudinaryVideoUrl(videos[0].public_id, {
-                      quality: 80,
-                      format: 'mp4'
-                    });
-                    videoElement.src = fallbackUrl;
-                  }}
-                >
-                  <source
-                    src={getCloudinaryVideoUrl(videos[0].public_id, {
-                      quality: 'auto',
-                      format: 'mp4'
-                    })}
-                    type="video/mp4"
-                  />
-                </video>
-              </motion.div>
+              <div className="videos-empty">
+                <p>All videos are displayed in the hero section above.</p>
+              </div>
             )}
           </div>
         </section>
