@@ -8,6 +8,8 @@ import { PhotoGallery } from '@/src/components/PhotoGallery';
 import { LoadingMemories } from '@/src/components/LoadingMemories';
 import { DifficultMemories } from '@/src/components/DifficultMemories';
 import { MediaUpload } from '@/src/components/MediaUpload';
+import { QuickNavigation } from '@/src/components/QuickNavigation';
+import { ChefOrder } from '@/src/components/ChefOrder';
 import { getCloudinaryVideoUrl, getCloudinaryImageUrl } from '@/src/utils/cloudinary';
 import '@/src/index.css';
 import './page.css';
@@ -135,7 +137,7 @@ export default function HomePage() {
   return (
     <div className="arrival-app">
       {/* Hero Section with MP4 Video */}
-      <section className="hero-section">
+      <section id="hero" className="hero-section">
         <div className="hero-video-container">
           {heroVideo?.secure_url ? (
             <video
@@ -215,7 +217,7 @@ export default function HomePage() {
       </section>
 
       {/* Arrival-style Memory Section */}
-      <section className="memory-section">
+      <section id="memory" className="memory-section">
         <div className="memory-container">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -241,7 +243,7 @@ export default function HomePage() {
       </section>
 
       {/* Photo Gallery - Memories in Time */}
-      <section className="gallery-section">
+      <section id="photos" className="gallery-section">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -262,7 +264,7 @@ export default function HomePage() {
 
       {/* Additional Videos Section */}
       {videos.length > 0 && (
-        <section className="videos-section">
+        <section id="videos" className="videos-section">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -341,10 +343,12 @@ export default function HomePage() {
       )}
 
       {/* Difficult but Valuable Memories */}
-      <DifficultMemories />
+      <section id="difficult-memories">
+        <DifficultMemories />
+      </section>
 
       {/* Final Narrative */}
-      <section className="final-section">
+      <section id="final" className="final-section">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -367,8 +371,14 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* Quick Navigation */}
+      <QuickNavigation />
+
       {/* Media Upload Component */}
       <MediaUpload onUploadComplete={() => fetchCloudinaryResources()} />
+
+      {/* Chef Order Component */}
+      <ChefOrder role="customer" />
     </div>
   );
 }
