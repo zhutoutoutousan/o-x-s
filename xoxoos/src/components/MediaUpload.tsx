@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './MediaUpload.css';
 
@@ -20,6 +20,7 @@ export function MediaUpload({ onUploadComplete }: MediaUploadProps) {
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [hasTriggeredRefresh, setHasTriggeredRefresh] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = useCallback((selectedFiles: FileList | null) => {
@@ -78,13 +79,6 @@ export function MediaUpload({ onUploadComplete }: MediaUploadProps) {
               : f
           )
         );
-
-        // Trigger refresh after a short delay
-        setTimeout(() => {
-          if (onUploadComplete) {
-            onUploadComplete();
-          }
-        }, 1000);
       } else {
         throw new Error(result.error || 'Upload failed');
       }
@@ -143,6 +137,7 @@ export function MediaUpload({ onUploadComplete }: MediaUploadProps) {
   const clearAll = useCallback(() => {
     setFiles([]);
     setIsOpen(false);
+    setHasTriggeredRefresh(false);
   }, []);
 
   const getFileIcon = (file: File) => {
@@ -162,6 +157,22 @@ export function MediaUpload({ onUploadComplete }: MediaUploadProps) {
 
   const allComplete = files.length > 0 && files.every((f) => f.status === 'success' || f.status === 'error');
   const hasErrors = files.some((f) => f.status === 'error');
+  const allSuccessful = files.length > 0 && files.every((f) => f.status === 'success');
+
+  // Only trigger refresh once when all files are complete
+  useEffect(() => {
+    if (allSuccessful && !hasTriggeredRefresh && onUploadComplete) {
+      setHasTriggeredRefresh(true);
+      // Wait a bit to ensure Cloudinary has processed all files
+      setTimeout(() => {
+        onUploadComplete();
+        // Reset after refresh is triggered
+        setTimeout(() => {
+          setHasTriggeredRefresh(false);
+        }, 2000);
+      }, 1500);
+    }
+  }, [allSuccessful, hasTriggeredRefresh, onUploadComplete]);
 
   return (
     <>
